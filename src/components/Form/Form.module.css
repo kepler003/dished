@@ -1,0 +1,35 @@
+.card {
+  width: 100%;
+  max-width: 45rem;
+  margin: var(--size-6) auto 0 auto;
+  padding: var(--size-6);
+  border-radius: var(--size-4);
+  box-shadow: var(--shadow-3);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before,
+.card::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-top: var(--size-7) solid var(--color-primary-4);
+  border-right: var(--size-7) solid transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.heading {
+  margin-bottom: var(--size-5);
+  padding: var(--size-4);
+  font-size: var(--size-6);
+  color: var(--color-primary-4);
+  text-align: center;
+}
+
+.submitBtn {
+  display: block;
+  margin: var(--size-7) auto 0 auto;
+}
