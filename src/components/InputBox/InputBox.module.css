@@ -11,13 +11,13 @@
 .label {
   margin-bottom: var(--size-2);
   font-weight: bold;
+  transform-origin: 0% 0%;
   transition: 100ms;
 }
 
-.label:focus-within {
+.box:focus-within .label {
   color: var(--color-primary-5);
   transform: scale(1.05);
-  transform-origin: 0%;
 }
 
 .error {
