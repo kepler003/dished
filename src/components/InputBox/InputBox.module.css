@@ -1,0 +1,27 @@
+.box {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+}
+
+.box:not(:first-child) {
+  margin-top: var(--size-5);
+}
+
+.label {
+  margin-bottom: var(--size-2);
+  font-weight: bold;
+  transition: 100ms;
+}
+
+.label:focus-within {
+  color: var(--color-primary-5);
+  transform: scale(1.05);
+  transform-origin: 0%;
+}
+
+.error {
+  margin-top: var(--size-2);
+  color: var(--color-danger-4);
+  font-size: 1.4rem;
+}
