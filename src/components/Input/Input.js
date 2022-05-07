@@ -1,25 +1,10 @@
+import InputBox from '../InputBox/InputBox';
 import cls from './Input.module.css';
 
-const Input = ({
-  label,
-  error,
-  type,
-  name,
-  id,
-  className,
-  children,
-  ...props
-}) => {
+const Input = ({ label, error, type, name, id, className, ...props }) => {
   const tag = name || id || undefined;
-
-  const elements = {
-    label: (
-      <label htmlFor={tag} className={cls.label}>
-        {label}
-      </label>
-    ),
-    error: <span className={cls.error}>{error}</span>,
-    input: (
+  return (
+    <InputBox label={label} labelFor={tag} error={error}>
       <input
         type={type || 'text'}
         name={tag}
@@ -27,15 +12,7 @@ const Input = ({
         className={cls.input}
         {...props}
       />
-    ),
-  };
-
-  return (
-    <div className={cls.box}>
-      {label && elements.label}
-      {children || elements.input}
-      {error && elements.label}
-    </div>
+    </InputBox>
   );
 };
 
