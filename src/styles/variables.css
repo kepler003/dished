@@ -48,6 +48,15 @@
   --color-danger-7: hsl(0, 51.43%, 27.45%);
   --color-danger-8: hsl(0, 51.81%, 16.27%);
   --color-danger-9: hsl(0, 52%, 4.9%);
+  --color-info-1: hsl(187.06, 68%, 95.1%);
+  --color-info-2: hsl(187.5, 68.29%, 83.92%);
+  --color-info-3: hsl(187.5, 68.57%, 72.55%);
+  --color-info-4: hsl(186.72, 67.68%, 61.18%);
+  --color-info-5: hsl(186.94, 67.84%, 50%);
+  --color-info-6: hsl(187.16, 67.68%, 38.82%);
+  --color-info-7: hsl(187.5, 68.57%, 27.45%);
+  --color-info-8: hsl(186.43, 68.29%, 16.08%);
+  --color-info-9: hsl(187.06, 68%, 4.9%);
   --color-gray-1: hsl(60, 4%, 95.1%);
   --color-gray-2: hsl(60, 3.61%, 83.73%);
   --color-gray-3: hsl(60, 4.29%, 72.55%);
