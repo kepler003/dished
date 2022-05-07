@@ -1,0 +1,28 @@
+.button {
+  min-width: var(--size-9);
+  min-height: 4rem;
+  padding: var(--size-2) var(--size-4);
+  background-color: var(--color-primary-5);
+  color: #fff;
+  border: none;
+  border-radius: var(--size-1);
+  transition: background-color 100ms;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: var(--color-primary-4);
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0.4rem var(--color-info-4);
+}
+
+.button:disabled {
+  background-color: var(--color-primary-3);
+}
+
+.button:disabled:hover {
+  cursor: not-allowed;
+}
