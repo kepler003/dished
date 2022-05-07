@@ -1,6 +1,15 @@
 import cls from './Input.module.css';
 
-const Input = ({ label, error, type, name, id, className, ...props }) => {
+const Input = ({
+  label,
+  error,
+  type,
+  name,
+  id,
+  className,
+  children,
+  ...props
+}) => {
   const tag = name || id || undefined;
 
   const elements = {
@@ -10,11 +19,7 @@ const Input = ({ label, error, type, name, id, className, ...props }) => {
       </label>
     ),
     error: <span className={cls.error}>{error}</span>,
-  };
-
-  return (
-    <div className={cls.box}>
-      {label && elements.label}
+    input: (
       <input
         type={type || 'text'}
         name={tag}
@@ -22,6 +27,13 @@ const Input = ({ label, error, type, name, id, className, ...props }) => {
         className={cls.input}
         {...props}
       />
+    ),
+  };
+
+  return (
+    <div className={cls.box}>
+      {label && elements.label}
+      {children || elements.input}
       {error && elements.label}
     </div>
   );
