@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: inherit;
   font: inherit;
 }
 
@@ -10,7 +11,7 @@ html {
 }
 
 body {
-  color: #444;
+  color: var(--color-gray-6);
   font-size: 1.6rem;
   font-family: 'Roboto', sans-serif;
 }
