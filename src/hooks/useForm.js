@@ -21,7 +21,7 @@ const getInitErrorsState = (inputs) => {
 const useForm = (config) => {
   const [inputs, setInputs] = useState(getInitInputsState(config));
   const [errors, setErrors] = useState(getInitErrorsState(config));
-  const [tempErrors, setTempErrors] = useState(getInitErrorsState(config));
+  const [outsideErrors, setOutsideErrors] = useState(getInitErrorsState(config));
 
   // Setters
   const setInput = (name, value) => {
@@ -59,8 +59,9 @@ const useForm = (config) => {
     });
   };
 
-  const addTempError = (name, error) => {
-    setTempErrors((prevErrors) => {
+  // Outside errors (errors from outside validation)
+  const addOutsideError = (name, error) => {
+    setOutsideErrors((prevErrors) => {
       if (prevErrors[name].includes(error)) return;
 
       return {
@@ -70,8 +71,8 @@ const useForm = (config) => {
     });
   };
 
-  const removeTempErrors = (name) => {
-    setTempErrors((prevErrors) => {
+  const removeOutsideErrors = (name) => {
+    setOutsideErrors((prevErrors) => {
       return {
         ...prevErrors,
         [name]: [],
@@ -159,13 +160,13 @@ const useForm = (config) => {
 
   const formData = Object.keys(inputs).reduce((prev, name) => {
     const inputErrors = inputs[name].wasChanged === true ? errors[name] : [];
-    const inputTempErrors = tempErrors[name];
+    const inputOutsideErrors = outsideErrors[name];
     return {
       ...prev,
       [name]: {
         ...inputs[name],
         setValue: (value) => setInput(name, value),
-        errors: [...inputErrors, ...inputTempErrors],
+        errors: [...inputErrors, ...inputOutsideErrors],
       },
     };
   }, {});
@@ -177,8 +178,8 @@ const useForm = (config) => {
       return this.hasErrors;
     },
     hasErrors: Object.keys(inputs).some((name) => errors[name].length),
-    addTempError,
-    removeTempErrors,
+    addOutsideError,
+    removeOutsideErrors,
   };
 };
 

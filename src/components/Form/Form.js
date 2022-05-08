@@ -55,7 +55,7 @@ const Form = () => {
     if (!e.target) return;
     const name = e.target.getAttribute('name');
     form[name].setValue(e.target.value);
-    form.removeTempErrors(name);
+    form.removeOutsideErrors(name);
   };
 
   const onSubmitHandler = (e) => {
@@ -74,7 +74,7 @@ const Form = () => {
       case 'pizza':
         {
           if (no_of_slices.errors.length || diameter.errors.length) return;
-          data.no_of_slices = +no_of_slices.value;
+          data.no_of_slices = no_of_slices.value;
           data.diameter = +diameter.value;
         }
         break;
@@ -96,7 +96,7 @@ const Form = () => {
   const onSendErrorHandler = (response) => {
     const name = Object.keys(response)[0];
     const error = response[name];
-    form.addTempError(name, error);
+    form.addOutsideError(name, error);
   };
 
   // Send dish data
