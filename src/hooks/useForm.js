@@ -59,24 +59,38 @@ const useForm = (config) => {
     const error = 'This field is required!';
 
     for (const name in inputs) {
-      if (!inputs[name].required) return;
-      if (!inputs[name].value.toString().trim()) {
-        addError(name, error);
-      } else {
+      if (!inputs[name].required) continue;
+      if (inputs[name].value.toString().trim()) {
         removeError(name, error);
+      } else {
+        addError(name, error);
+      }
+    }
+  };
+
+  const checkValues = () => {
+    const error = 'Invalid value!';
+
+    for (const name in inputs) {
+      if (!inputs[name].values) continue;
+      if (inputs[name].values.includes(inputs[name].value.toString().trim())) {
+        removeError(name, error);
+      } else {
+        addError(name, error);
       }
     }
   };
 
   useEffect(() => {
     checkRequired();
+    checkValues();
   }, [inputs]);
 
   return Object.keys(inputs).reduce(
     (prev, name) => ({
       ...prev,
       [name]: {
-        value: inputs[name].value,
+        ...inputs[name],
         setValue: (value) => setInput(name, value),
         errors: errors[name],
       },
