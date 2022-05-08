@@ -81,9 +81,39 @@ const useForm = (config) => {
     }
   };
 
+  const checkMin = () => {
+    const error = 'Not enough!';
+
+    for (const name in inputs) {
+      const min = inputs[name].min;
+      if (min === undefined || min === null) continue;
+      if (inputs[name].value >= min) {
+        removeError(name, error);
+      } else {
+        addError(name, error);
+      }
+    }
+  };
+
+  const checkMax = () => {
+    const error = 'Too much!';
+
+    for (const name in inputs) {
+      const max = inputs[name].max;
+      if (max === undefined || max === null) continue;
+      if (inputs[name].value <= max) {
+        removeError(name, error);
+      } else {
+        addError(name, error);
+      }
+    }
+  };
+
   useEffect(() => {
     checkRequired();
     checkValues();
+    checkMin();
+    checkMax();
   }, [inputs]);
 
   return Object.keys(inputs).reduce(
