@@ -21,6 +21,7 @@ const useForm = (config) => {
   const [inputs, setInputs] = useState(getInitInputsState(config));
   const [errors, setErrors] = useState(getInitErrorsState(config));
 
+  // Setters
   const setInput = (name, value) => {
     setInputs((prevInputs) => ({
       ...prevInputs,
@@ -55,6 +56,7 @@ const useForm = (config) => {
     });
   };
 
+  // Validators
   const checkRequired = () => {
     const error = 'This field is required!';
 
@@ -109,6 +111,7 @@ const useForm = (config) => {
     }
   };
 
+  // Validate on form change
   useEffect(() => {
     checkRequired();
     checkValues();
