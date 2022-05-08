@@ -5,7 +5,7 @@ import cls from './Input.module.css';
 const Input = ({
   label,
   errors,
-  type,
+  type = 'text',
   name,
   id,
   getFocus,
@@ -23,7 +23,7 @@ const Input = ({
   return (
     <InputBox label={label} labelFor={tag} errors={errors}>
       <input
-        type={type || 'text'}
+        type={type}
         name={tag}
         id={tag}
         ref={ref}
