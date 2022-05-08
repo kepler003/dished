@@ -133,6 +133,7 @@ const Form = () => {
         <Input
           label='Dish name'
           name='name'
+          getFocus={true}
           value={name.value}
           errors={name.errors}
           onChange={onChangeHandler}
