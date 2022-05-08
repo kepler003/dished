@@ -7,6 +7,7 @@ import Button from '../Button/Button';
 import cls from './Form.module.css';
 
 const Form = () => {
+  const [sending, setSending] = useState(false);
   const form = useForm({
     name: {
       value: '',
@@ -101,6 +102,7 @@ const Form = () => {
   // Send dish data
   const send = async (data) => {
     try {
+      setSending(true);
       let responseJSON = await fetch(
         'https://frosty-wood-6558.getsandbox.com:443/dishes',
         {
@@ -119,6 +121,8 @@ const Form = () => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -197,8 +201,8 @@ const Form = () => {
             onChange={onChangeHandler}
           />
         )}
-        <Button type='submit' className={cls.submitBtn}>
-          Add +
+        <Button type='submit' className={cls.submitBtn} disabled={sending}>
+          {sending ? 'Adding...' : 'Add +'}
         </Button>
       </form>
     </div>
