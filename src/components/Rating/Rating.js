@@ -6,12 +6,10 @@ const Rating = ({ value = 5, max = 10, label, error, name, id, onChange }) => {
   const [rating, setRating] = useState(value);
   const tag = name || id || undefined;
 
-  // Lift state up
-  useEffect(() => onChange && onChange(rating), [rating]);
-
   // Update state
   const onClickHandler = (e) => {
     setRating(e.target.getAttribute('value'));
+    onChange(e);
   };
 
   // Loose focus when cursor leaves the input
@@ -23,6 +21,7 @@ const Rating = ({ value = 5, max = 10, label, error, name, id, onChange }) => {
     return (
       <button
         key={index}
+        name={tag}
         value={max - index}
         className={cls.btn}
         onClick={onClickHandler}
