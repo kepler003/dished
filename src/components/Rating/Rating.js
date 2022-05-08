@@ -17,6 +17,10 @@ const Rating = ({ value = 5, max = 10, label, error, name, id, onChange }) => {
     document.activeElement.blur();
   };
 
+  const onMouseOverHandler = (e) => {
+    e.target.focus();
+  };
+
   const btns = new Array(max).fill(null).map((empty, index) => {
     return (
       <button
@@ -26,6 +30,7 @@ const Rating = ({ value = 5, max = 10, label, error, name, id, onChange }) => {
         value={max - index}
         className={cls.btn}
         onClick={onClickHandler}
+        onMouseOver={onMouseOverHandler}
       >
         {max - index <= rating ? '★' : '☆'}
       </button>
