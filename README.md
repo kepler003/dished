@@ -1,5 +1,9 @@
 # Dished app
 
+## Live demo
+
+Check out a [live demo](https://kepler003.github.io/dished/) of this app.
+
 ## About the project
 
 Welcome to the 'Dished app' project. This app allows you to add new dishes to the menu.
