@@ -17,6 +17,7 @@ const Rating = ({ value = 5, max = 10, label, error, name, id, onChange }) => {
     document.activeElement.blur();
   };
 
+  // Get focus on hover
   const onMouseOverHandler = (e) => {
     e.target.focus();
   };
