@@ -1,6 +1,6 @@
 .card {
   width: 100%;
-  max-width: 45rem;
+  max-width: min(45rem, calc(100% - var(--size-4) * 2));
   margin: var(--size-6) auto 0 auto;
   padding: var(--size-6);
   border-radius: var(--size-4);
