@@ -9,38 +9,31 @@ import cls from './Form.module.css';
 const Form = () => {
   const form = useForm({
     name: {
-      id: 'name',
       value: '',
     },
-    prepTime: {
-      id: 'preparation_time',
+    preparation_time: {
       value: '00:00:00',
     },
     type: {
-      id: 'type',
-      value: 'Pizza',
-      values: ['Pizza', 'Soup', 'Sandwich'],
+      value: 'pizza',
+      values: ['pizza', 'soup', 'sandwich'],
     },
-    pizzaSlices: {
-      id: 'no_of_slices',
+    no_of_slices: {
       value: 6,
       min: 1,
       max: 16,
     },
     diameter: {
-      id: 'diameter',
       value: 20,
       min: 20,
       max: 60,
     },
-    spiciness: {
-      id: 'spiciness_scale',
+    spiciness_scale: {
       value: 5,
       min: 1,
       max: 10,
     },
-    breadSlices: {
-      id: 'slices_of_bread',
+    slices_of_bread: {
       value: 4,
       min: 1,
     },
@@ -48,23 +41,85 @@ const Form = () => {
 
   const {
     name,
-    prepTime,
+    preparation_time,
     type,
-    pizzaSlices,
+    no_of_slices,
     diameter,
-    spiciness,
-    breadSlices,
+    spiciness_scale,
+    slices_of_bread,
   } = form;
 
+  // Handlers
   const onChangeHandler = (e) => {
     if (!e.target) return;
     const name = e.target.getAttribute('name');
     form[name].setValue(e.target.value);
+    form.removeTempErrors(name);
   };
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    form.validate();
+
+    const isValid = form.validate();
+    if (isValid) return;
+
+    const data = {
+      name: name.value,
+      preparation_time: preparation_time.value,
+      type: type.value,
+    };
+
+    switch (type.value) {
+      case 'pizza':
+        {
+          if (no_of_slices.errors.length || diameter.errors.length) return;
+          data.no_of_slices = +no_of_slices.value;
+          data.diameter = +diameter.value;
+        }
+        break;
+      case 'soup':
+        {
+          if (spiciness_scale.errors.length) return;
+          data.spiciness_scale = +spiciness_scale.value;
+        }
+        break;
+      default: {
+        if (slices_of_bread.errors.length) return;
+        data.slices_of_bread = +slices_of_bread.value;
+      }
+    }
+
+    send(data);
+  };
+
+  const onSendErrorHandler = (response) => {
+    const name = Object.keys(response)[0];
+    const error = response[name];
+    form.addTempError(name, error);
+  };
+
+  // Send dish data
+  const send = async (data) => {
+    try {
+      let responseJSON = await fetch(
+        'https://frosty-wood-6558.getsandbox.com:443/dishes',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const response = await responseJSON.json();
+
+      if (!responseJSON.ok) {
+        onSendErrorHandler(response);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -80,11 +135,11 @@ const Form = () => {
         />
         <Input
           label='Preparation time'
-          name='prepTime'
+          name='preparation_time'
           type='time'
           step='1'
-          value={prepTime.value}
-          errors={prepTime.errors}
+          value={preparation_time.value}
+          errors={preparation_time.errors}
           onChange={onChangeHandler}
         />
         <Select
@@ -95,17 +150,17 @@ const Form = () => {
           errors={type.errors}
           onChange={onChangeHandler}
         />
-        {type.value === 'Pizza' && (
+        {type.value === 'pizza' && (
           <>
             <Input
               label='Slices of pizza'
-              name='pizzaSlices'
+              name='no_of_slices'
               type='number'
               step='1'
               min='1'
               max='16'
-              value={pizzaSlices.value}
-              errors={pizzaSlices.errors}
+              value={no_of_slices.value}
+              errors={no_of_slices.errors}
               onChange={onChangeHandler}
             />
             <Input
@@ -121,24 +176,24 @@ const Form = () => {
             />
           </>
         )}
-        {type.value === 'Soup' && (
+        {type.value === 'soup' && (
           <Rating
             label='Spiciness'
-            name='spiciness'
-            value={spiciness.value}
-            errors={spiciness.errors}
+            name='spiciness_scale'
+            value={spiciness_scale.value}
+            errors={spiciness_scale.errors}
             onChange={onChangeHandler}
           />
         )}
-        {type.value === 'Sandwich' && (
+        {type.value === 'sandwich' && (
           <Input
             label='Slices of bread'
-            name='breadSlices'
+            name='slices_of_bread'
             type='number'
             step='1'
             min='1'
-            value={breadSlices.value}
-            errors={breadSlices.errors}
+            value={slices_of_bread.value}
+            errors={slices_of_bread.errors}
             onChange={onChangeHandler}
           />
         )}
