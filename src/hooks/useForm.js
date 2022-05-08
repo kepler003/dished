@@ -21,7 +21,9 @@ const getInitErrorsState = (inputs) => {
 const useForm = (config) => {
   const [inputs, setInputs] = useState(getInitInputsState(config));
   const [errors, setErrors] = useState(getInitErrorsState(config));
-  const [outsideErrors, setOutsideErrors] = useState(getInitErrorsState(config));
+  const [outsideErrors, setOutsideErrors] = useState(
+    getInitErrorsState(config)
+  );
 
   // Setters
   const setInput = (name, value) => {
@@ -171,15 +173,17 @@ const useForm = (config) => {
     };
   }, {});
 
+  const isValid = !Object.keys(inputs).some((name) => errors[name].length);
+
   return {
     ...formData,
-    validate() {
-      validate();
-      return this.hasErrors;
-    },
-    hasErrors: Object.keys(inputs).some((name) => errors[name].length),
+    isValid,
     addOutsideError,
     removeOutsideErrors,
+    validate() {
+      validate();
+      return this.isValid;
+    },
   };
 };
 
