@@ -1,7 +1,7 @@
 import classes from '../../utils/classes';
 import cls from './InputBox.module.css';
 
-const InputBox = ({ label, error, labelFor, children, className }) => {
+const InputBox = ({ label, errors, labelFor, children, className }) => {
   return (
     <div className={classes(className, cls.box)}>
       {label && (
@@ -10,7 +10,12 @@ const InputBox = ({ label, error, labelFor, children, className }) => {
         </label>
       )}
       {children}
-      {error && <span className={cls.error}>{error}</span>}
+      {errors &&
+        errors.map((error) => (
+          <span key={error} className={cls.error}>
+            {error}
+          </span>
+        ))}
     </div>
   );
 };
