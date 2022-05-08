@@ -7,6 +7,7 @@ const getInitInputsState = (inputs) => {
       [name]: {
         ...inputs[name],
         required: inputs[name].required ?? true,
+        wasChanged: false,
       },
     }),
     {}
@@ -28,6 +29,7 @@ const useForm = (config) => {
       [name]: {
         ...prevInputs[name],
         value,
+        wasChanged: true,
       },
     }));
   };
@@ -56,11 +58,27 @@ const useForm = (config) => {
     });
   };
 
+  const validate = () => {
+    setInputs((prevInputs) =>
+      Object.keys(prevInputs).reduce(
+        (prev, name) => ({
+          ...prev,
+          [name]: {
+            ...prevInputs[name],
+            wasChanged: true,
+          },
+        }),
+        {}
+      )
+    );
+  };
+
   // Validators
   const checkRequired = () => {
     const error = 'This field is required!';
 
     for (const name in inputs) {
+      if (!inputs[name].wasChanged) return;
       if (!inputs[name].required) continue;
       if (inputs[name].value.toString().trim()) {
         removeError(name, error);
@@ -74,6 +92,7 @@ const useForm = (config) => {
     const error = 'Invalid value!';
 
     for (const name in inputs) {
+      if (!inputs[name].wasChanged) return;
       if (!inputs[name].values) continue;
       if (inputs[name].values.includes(inputs[name].value.toString().trim())) {
         removeError(name, error);
@@ -87,6 +106,7 @@ const useForm = (config) => {
     const error = 'Not enough!';
 
     for (const name in inputs) {
+      if (!inputs[name].wasChanged) return;
       const min = inputs[name].min;
       if (min === undefined || min === null) continue;
       if (inputs[name].value >= min) {
@@ -101,6 +121,7 @@ const useForm = (config) => {
     const error = 'Too much!';
 
     for (const name in inputs) {
+      if (!inputs[name].wasChanged) return;
       const max = inputs[name].max;
       if (max === undefined || max === null) continue;
       if (inputs[name].value <= max) {
@@ -128,7 +149,7 @@ const useForm = (config) => {
         errors: errors[name],
       },
     }),
-    {}
+    { validate }
   );
 };
 
