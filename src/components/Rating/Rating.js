@@ -20,6 +20,7 @@ const Rating = ({ value = 5, max = 10, label, error, name, id, onChange }) => {
   const btns = new Array(max).fill(null).map((empty, index) => {
     return (
       <button
+        type='button'
         key={index}
         name={tag}
         value={max - index}
