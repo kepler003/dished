@@ -21,6 +21,7 @@ const getInitErrorsState = (inputs) => {
 const useForm = (config) => {
   const [inputs, setInputs] = useState(getInitInputsState(config));
   const [errors, setErrors] = useState(getInitErrorsState(config));
+  const [tempErrors, setTempErrors] = useState(getInitErrorsState(config));
 
   // Setters
   const setInput = (name, value) => {
@@ -54,6 +55,26 @@ const useForm = (config) => {
       return {
         ...prevErrors,
         [name]: prevErrors[name].filter((prevError) => prevError !== error),
+      };
+    });
+  };
+
+  const addTempError = (name, error) => {
+    setTempErrors((prevErrors) => {
+      if (prevErrors[name].includes(error)) return;
+
+      return {
+        ...prevErrors,
+        [name]: [...prevErrors[name], error],
+      };
+    });
+  };
+
+  const removeTempErrors = (name) => {
+    setTempErrors((prevErrors) => {
+      return {
+        ...prevErrors,
+        [name]: [],
       };
     });
   };
@@ -136,17 +157,18 @@ const useForm = (config) => {
     checkMax();
   }, [inputs]);
 
-  const formData = Object.keys(inputs).reduce(
-    (prev, name) => ({
+  const formData = Object.keys(inputs).reduce((prev, name) => {
+    const inputErrors = inputs[name].wasChanged === true ? errors[name] : [];
+    const inputTempErrors = tempErrors[name];
+    return {
       ...prev,
       [name]: {
         ...inputs[name],
         setValue: (value) => setInput(name, value),
-        errors: inputs[name].wasChanged === true ? errors[name] : [],
+        errors: [...inputErrors, ...inputTempErrors],
       },
-    }),
-    {}
-  );
+    };
+  }, {});
 
   return {
     ...formData,
@@ -155,6 +177,8 @@ const useForm = (config) => {
       return this.hasErrors;
     },
     hasErrors: Object.keys(inputs).some((name) => errors[name].length),
+    addTempError,
+    removeTempErrors,
   };
 };
 
