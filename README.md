@@ -15,7 +15,9 @@ To build the app for production run `npm run build` or `yarn run build`.
 ## Project development
 
 Node version: 16.14.2
+
 NPM version: 8.5.0
+
 Develompent time: ~9 hours
 
 ## Create React App
