@@ -52,7 +52,6 @@ const Form = () => {
 
   // Handlers
   const onChangeHandler = (e) => {
-    if (!e.target) return;
     const name = e.target.getAttribute('name');
     form[name].setValue(e.target.value);
     form.removeOutsideErrors(name);
@@ -62,35 +61,19 @@ const Form = () => {
     e.preventDefault();
 
     const isValid = form.validate();
-    if (isValid) return;
+    if (!isValid) return;
 
-    const data = {
+    send({
       name: name.value,
       preparation_time: preparation_time.value,
       type: type.value,
-    };
-
-    switch (type.value) {
-      case 'pizza':
-        {
-          if (no_of_slices.errors.length || diameter.errors.length) return;
-          data.no_of_slices = no_of_slices.value;
-          data.diameter = +diameter.value;
-        }
-        break;
-      case 'soup':
-        {
-          if (spiciness_scale.errors.length) return;
-          data.spiciness_scale = +spiciness_scale.value;
-        }
-        break;
-      default: {
-        if (slices_of_bread.errors.length) return;
-        data.slices_of_bread = +slices_of_bread.value;
-      }
-    }
-
-    send(data);
+      ...(type.value === 'pizza' && { no_of_slices: +no_of_slices.value }),
+      ...(type.value === 'pizza' && { diameter: +diameter.value }),
+      ...(type.value === 'soup' && { spiciness_scale: +spiciness_scale.value }),
+      ...(type.value === 'sandwich' && {
+        slices_of_bread: +slices_of_bread.value,
+      }),
+    });
   };
 
   const onSendErrorHandler = (response) => {
@@ -99,26 +82,24 @@ const Form = () => {
     form.addOutsideError(name, error);
   };
 
-  // Send dish data
   const send = async (data) => {
     try {
       setSending(true);
+
       let responseJSON = await fetch(
         'https://frosty-wood-6558.getsandbox.com:443/dishes',
         {
           method: 'POST',
+          body: JSON.stringify(data),
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(data),
         }
       );
 
       const response = await responseJSON.json();
 
-      if (!responseJSON.ok) {
-        onSendErrorHandler(response);
-      }
+      if (!responseJSON.ok) onSendErrorHandler(response);
     } catch (err) {
       console.log(err);
     } finally {
