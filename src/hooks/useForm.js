@@ -58,27 +58,11 @@ const useForm = (config) => {
     });
   };
 
-  const validate = () => {
-    setInputs((prevInputs) =>
-      Object.keys(prevInputs).reduce(
-        (prev, name) => ({
-          ...prev,
-          [name]: {
-            ...prevInputs[name],
-            wasChanged: true,
-          },
-        }),
-        {}
-      )
-    );
-  };
-
   // Validators
   const checkRequired = () => {
     const error = 'This field is required!';
 
     for (const name in inputs) {
-      if (!inputs[name].wasChanged) return;
       if (!inputs[name].required) continue;
       if (inputs[name].value.toString().trim()) {
         removeError(name, error);
@@ -92,7 +76,6 @@ const useForm = (config) => {
     const error = 'Invalid value!';
 
     for (const name in inputs) {
-      if (!inputs[name].wasChanged) return;
       if (!inputs[name].values) continue;
       if (inputs[name].values.includes(inputs[name].value.toString().trim())) {
         removeError(name, error);
@@ -106,7 +89,6 @@ const useForm = (config) => {
     const error = 'Not enough!';
 
     for (const name in inputs) {
-      if (!inputs[name].wasChanged) return;
       const min = inputs[name].min;
       if (min === undefined || min === null) continue;
       if (inputs[name].value >= min) {
@@ -121,7 +103,6 @@ const useForm = (config) => {
     const error = 'Too much!';
 
     for (const name in inputs) {
-      if (!inputs[name].wasChanged) return;
       const max = inputs[name].max;
       if (max === undefined || max === null) continue;
       if (inputs[name].value <= max) {
@@ -132,7 +113,22 @@ const useForm = (config) => {
     }
   };
 
-  // Validate on form change
+  const validate = () => {
+    setInputs((prevInputs) =>
+      Object.keys(inputs).reduce(
+        (prev, name) => ({
+          ...prev,
+          [name]: {
+            ...prevInputs[name],
+            wasChanged: true,
+          },
+        }),
+        {}
+      )
+    );
+  };
+
+  // Validate when form changes
   useEffect(() => {
     checkRequired();
     checkValues();
@@ -140,17 +136,26 @@ const useForm = (config) => {
     checkMax();
   }, [inputs]);
 
-  return Object.keys(inputs).reduce(
+  const formData = Object.keys(inputs).reduce(
     (prev, name) => ({
       ...prev,
       [name]: {
         ...inputs[name],
         setValue: (value) => setInput(name, value),
-        errors: errors[name],
+        errors: inputs[name].wasChanged === true ? errors[name] : [],
       },
     }),
-    { validate }
+    {}
   );
+
+  return {
+    ...formData,
+    validate() {
+      validate();
+      return this.hasErrors;
+    },
+    hasErrors: Object.keys(inputs).some((name) => errors[name].length),
+  };
 };
 
 export default useForm;
